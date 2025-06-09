@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>扫码访问入口</title>
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+    <style>
+        .qrcode-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            text-align: center;
+            border: 1px solid #eee;
+        }
+        #qrcode {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+        .qrcode-label {
+            display: block;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 10px;
+            font-weight: 500;
+            color: #333;
+        }
+        .warning-banner {
+            background: #fff8e6;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px;
+            border-left: 4px solid #ffc107;
+            display: none; /* 默认隐藏 */
+        }
+    </style>
+</head>
+<body>
+    <h1>我的网站内容</h1>
+    <p>这是一个示例网站，右下角有二维码生成</p>
+    
+    <!-- 警告提示（仅本地测试时显示） -->
+    <div id="localWarning" class="warning-banner">
+        <strong>⚠️ 本地测试限制：</strong> 
+        微信无法打开本地链接(file://)，请部署到服务器或使用内网穿透工具
+    </div>
+    
+    <!-- 固定在右下角的二维码入口 -->
+    <div class="qrcode-container">
+        <div id="qrcode"></div>
+        <span class="qrcode-label">微信扫码访问</span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取当前URL并处理微信兼容性
+            let currentUrl = window.location.href;
+            
+            // 1. 处理本地文件协议问题
+            if(currentUrl.startsWith('file://')) {
+                document.getElementById('localWarning').style.display = 'block';
+                
+                // 提供替代方案（使用ngrok示例）
+                currentUrl = "https://example.com"; // 替换为您的公网URL
+                
+                // 或者提示用户
+                alert("微信无法打开本地文件，请使用公网可访问的URL");
+            }
+            
+            // 2. 确保使用HTTPS（微信强制要求）
+            if(currentUrl.startsWith('http://')) {
+                currentUrl = currentUrl.replace('http://', 'https://');
+            }
+            
+            // 3. 清理URL中的特殊字符
+            currentUrl = encodeURI(currentUrl);
+            
+            // 4. 生成二维码（提高容错率）
+            try {
+                new QRCode(document.getElementById("qrcode"), {
+                    text: currentUrl,
+                    width: 150,
+                    height: 150,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.Q // 更高的容错率
+                });
+                
+                console.log("生成的二维码URL:", currentUrl);
+                
+                // 5. 添加调试信息
+                const debugInfo = document.createElement('p');
+                debugInfo.style.fontSize = '12px';
+                debugInfo.style.color = '#666';
+                debugInfo.textContent = `URL: ${currentUrl}`;
+                document.querySelector('.qrcode-container').appendChild(debugInfo);
+                
+            } catch (error) {
+                console.error("二维码生成失败:", error);
+                document.getElementById("qrcode").innerHTML = 
+                    '<p style="color:red">二维码生成失败</p>';
+            }
+        });
+    </script>
+</body>
+</html>
