@@ -1,109 +1,698 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>扫码访问入口</title>
-    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>羊肚菌物流追溯信息 - 养晨农业</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .qrcode-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: white;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9f1 0%, #e6f4e9 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 120px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(120deg, #1a6d3b 0%, #2c9c5c 100%);
+            color: white;
+            padding: 25px 0;
+            border-radius: 0 0 25px 25px;
+            box-shadow: 0 10px 30px rgba(26, 109, 59, 0.25);
+            margin-bottom: 40px;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .product-details {
+            margin-top: 20px;
+            background: rgba(255,255,255,0.15);
             padding: 15px;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            text-align: center;
-            border: 1px solid #eee;
         }
-        #qrcode {
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .detail-label {
+            width: 100px;
+            font-weight: bold;
+            opacity: 0.9;
+        }
+        
+        .detail-value {
+            flex: 1;
+        }
+        
+        .trace-code {
+            background: white;
+            color: #1a6d3b;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .product-image {
+            flex: 0 0 180px;
+            text-align: center;
+        }
+        
+        .product-image img {
             width: 150px;
             height: 150px;
-            margin: 0 auto;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
-        .qrcode-label {
-            display: block;
-            text-align: center;
-            font-size: 16px;
+        
+        .product-image .certified {
+            background: #ffd700;
+            color: #8b7500;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
             margin-top: 10px;
-            font-weight: 500;
-            color: #333;
+            font-size: 0.9rem;
         }
-        .warning-banner {
-            background: #fff8e6;
+        
+        .timeline-section {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            color: #1a6d3b;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e8f5e9;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin-left: 20px;
+        }
+        
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: #2c9c5c;
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 35px;
+            padding-left: 30px;
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -9px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: #1a6d3b;
+            border: 3px solid white;
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 0 3px #1a6d3b;
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .timeline-title {
+            font-size: 1.3rem;
+            color: #1a6d3b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .timeline-date {
+            background: #e8f5e9;
+            color: #1a6d3b;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        
+        .timeline-content {
+            background: #f9fbf7;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 3px solid #2c9c5c;
+        }
+        
+        .content-row {
+            display: flex;
+            margin-bottom: 12px;
+        }
+        
+        .content-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .content-label {
+            width: 100px;
+            font-weight: bold;
+            color: #1a6d3b;
+        }
+        
+        .content-value {
+            flex: 1;
+        }
+        
+        .photos {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .photo {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .photo:hover img {
+            transform: scale(1.1);
+        }
+        
+        .quality-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .quality-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .quality-card {
+            background: #f9fbf7;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #e1f0e5;
+            transition: all 0.3s;
+        }
+        
+        .quality-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-color: #2c9c5c;
+        }
+        
+        .quality-icon {
+            width: 60px;
+            height: 60px;
+            background: #e8f5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: #1a6d3b;
+            font-size: 1.8rem;
+        }
+        
+        .quality-title {
+            color: #1a6d3b;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .footer-qr {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1a3b29;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            z-index: 100;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .qr-container {
+            display: inline-block;
+            background: white;
             padding: 15px;
-            border-radius: 8px;
-            margin: 20px;
-            border-left: 4px solid #ffc107;
-            display: none; /* 默认隐藏 */
+            border-radius: 15px;
+            margin-top: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .qr-code::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 48%, #1a6d3b 50%, transparent 52%),
+                linear-gradient(-45deg, transparent 48%, #1a6d3b 50%, transparent 52%);
+            background-size: 20px 20px;
+            opacity: 0.5;
+        }
+        
+        .qr-code i {
+            font-size: 3rem;
+            color: #1a6d3b;
+            z-index: 2;
+        }
+        
+        .qr-text {
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.9);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .product-info {
+                width: 100%;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+                text-align: center;
+                margin-bottom: 15px;
+            }
+            
+            .detail-label {
+                width: 100%;
+                margin-bottom: 5px;
+            }
+            
+            .timeline {
+                padding-left: 20px;
+                margin-left: 10px;
+            }
+            
+            .timeline-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .timeline-date {
+                margin-left: 30px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>我的网站内容</h1>
-    <p>这是一个示例网站，右下角有二维码生成</p>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="product-info">
+                    <h1><i class="fas fa-seedling"></i> 羊肚菌产品追溯信息</h1>
+                    <p>全程区块链记录，从田间到餐桌，品质透明可见</p>
+                    
+                    <div class="product-details">
+                        <div class="detail-row">
+                            <div class="detail-label">产品名称：</div>
+                            <div class="detail-value">青神特级羊肚菌</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">产品批次：</div>
+                            <div class="detail-value">20240415-BJ028</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">产地：</div>
+                            <div class="detail-value">四川省眉山市青神县白果乡</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">包装日期：</div>
+                            <div class="detail-value">2024年4月25日</div>
+                        </div>
+                        <div class="trace-code">
+                            <i class="fas fa-qrcode"></i> 追溯码：7X9A2B5C8D3E1F
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="product-image">
+                    <img src="https://images.unsplash.com/photo-1596040033221-a1eef5c685fd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="特级羊肚菌">
+                    <div class="certified">
+                        <i class="fas fa-certificate"></i> 有机认证产品
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
     
-    <!-- 警告提示（仅本地测试时显示） -->
-    <div id="localWarning" class="warning-banner">
-        <strong>⚠️ 本地测试限制：</strong> 
-        微信无法打开本地链接(file://)，请部署到服务器或使用内网穿透工具
+    <div class="container">
+        <div class="timeline-section">
+            <h2 class="section-title"><i class="fas fa-list-alt"></i> 产品全流程追溯</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title"><i class="fas fa-seedling"></i> 种植环节</h3>
+                        <div class="timeline-date">2024年3月15日</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="content-row">
+                            <div class="content-label">种植基地：</div>
+                            <div class="content-value">青神县白果乡羊肚菌种植基地3号大棚</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">种植技术：</div>
+                            <div class="content-value">智能温室种植，温湿度自动控制</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">环境监测：</div>
+                            <div class="content-value">温度：18-22℃，湿度：85%，光照：适中</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">操作人员：</div>
+                            <div class="content-value">李技术员 (ID: TEC007)</div>
+                        </div>
+                        <div class="photos">
+                            <div class="photo">
+                                <img src="https://images.unsplash.com/photo-1516253593875-bd7ba052fbc5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="种植基地">
+                            </div>
+                            <div class="photo">
+                                <img src="https://images.unsplash.com/photo-1551650992-ee4fd47df41f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="种植环境">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title"><i class="fas fa-cloud-sun"></i> 生长监测</h3>
+                        <div class="timeline-date">2024年3月-4月</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="content-row">
+                            <div class="content-label">监测系统：</div>
+                            <div class="content-value">智能农业物联网监测系统</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">生长情况：</div>
+                            <div class="content-value">生长良好，无病虫害发生</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">技术指导：</div>
+                            <div class="content-value">重庆市农科院食用菌专家远程指导</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">质检报告：</div>
+                            <div class="content-value">
+                                <span style="color: #1a6d3b; font-weight: bold;">
+                                    <i class="fas fa-check-circle"></i> 符合有机产品标准
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title"><i class="fas fa-hand-paper"></i> 人工采摘</h3>
+                        <div class="timeline-date">2024年4月20日</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="content-row">
+                            <div class="content-label">采摘时间：</div>
+                            <div class="content-value">上午6:00-9:00 (最佳采摘时段)</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">采摘标准：</div>
+                            <div class="content-value">菌盖直径3-5cm，菌柄长度2-3cm</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">操作人员：</div>
+                            <div class="content-value">王丽蓉等5名专业采摘员</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">质检结果：</div>
+                            <div class="content-value">合格率98.7%，特级品率85.2%</div>
+                        </div>
+                        <div class="photos">
+                            <div class="photo">
+                                <img src="https://images.unsplash.com/photo-1587049633312-d628ae50a8ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="人工采摘">
+                            </div>
+                            <div class="photo">
+                                <img src="https://images.unsplash.com/photo-1595341788871-10e5e9a3d1c2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="采摘成果">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title"><i class="fas fa-box-open"></i> 保鲜包装</h3>
+                        <div class="timeline-date">2024年4月20日</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="content-row">
+                            <div class="content-label">处理工艺：</div>
+                            <div class="content-value">4℃冷水清洗 + 气调保鲜包装</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">包装材料：</div>
+                            <div class="content-value">食品级可降解保鲜盒 + 环保保温袋</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">保鲜技术：</div>
+                            <div class="content-value">纳米抗菌涂层 + 气调包装 (O₂: 5%, CO₂: 15%, N₂: 80%)</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">包装环境：</div>
+                            <div class="content-value">无菌车间，温度10℃，湿度60%</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title"><i class="fas fa-truck"></i> 冷链运输</h3>
+                        <div class="timeline-date">2024年4月21日-24日</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="content-row">
+                            <div class="content-label">运输方式：</div>
+                            <div class="content-value">全程冷链物流</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">温度监控：</div>
+                            <div class="content-value">全程保持0-4℃ (实时监控数据可查)</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">运输路线：</div>
+                            <div class="content-value">青神县 → 成都 → 目的地城市</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">运输时间：</div>
+                            <div class="content-value">总时长72小时，途中无异常</div>
+                        </div>
+                        <div class="photos">
+                            <div class="photo">
+                                <img src="https://images.unsplash.com/photo-1603739903239-8b6e64c3b185?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="冷链运输">
+                            </div>
+                            <div class="photo">
+                                <img src="https://images.unsplash.com/photo-1560963689-b9b4d0d825d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="温度监控">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-title"><i class="fas fa-store"></i> 终端销售</h3>
+                        <div class="timeline-date">2024年4月25日</div>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="content-row">
+                            <div class="content-label">上架时间：</div>
+                            <div class="content-value">2024年4月25日 上午8:30</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">销售渠道：</div>
+                            <div class="content-value">成都伊藤洋华堂生鲜超市</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">存储条件：</div>
+                            <div class="content-value">冷藏专柜，温度2-4℃</div>
+                        </div>
+                        <div class="content-row">
+                            <div class="content-label">保质期限：</div>
+                            <div class="content-value">冷藏保存7天 (至2024年5月2日)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quality-section">
+            <h2 class="section-title"><i class="fas fa-award"></i> 品质保障信息</h2>
+            
+            <div class="quality-grid">
+                <div class="quality-card">
+                    <div class="quality-icon">
+                        <i class="fas fa-flask"></i>
+                    </div>
+                    <h3 class="quality-title">质量检测</h3>
+                    <p>通过32项安全指标检测，无农药残留，符合有机食品标准</p>
+                </div>
+                
+                <div class="quality-card">
+                    <div class="quality-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3 class="quality-title">有机认证</h3>
+                    <p>中国有机产品认证 (证书编号: ORG-CN-2024-12345)</p>
+                </div>
+                
+                <div class="quality-card">
+                    <div class="quality-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="quality-title">区块链保障</h3>
+                    <p>全流程信息上链存储，已通过8个节点验证，数据不可篡改</p>
+                </div>
+                
+                <div class="quality-card">
+                    <div class="quality-icon">
+                        <i class="fas fa-thermometer-half"></i>
+                    </div>
+                    <h3 class="quality-title">保鲜保障</h3>
+                    <p>全程冷链运输，温度波动小于±0.5℃，保证最佳新鲜度</p>
+                </div>
+            </div>
+        </div>
     </div>
     
-    <!-- 固定在右下角的二维码入口 -->
-    <div class="qrcode-container">
-        <div id="qrcode"></div>
-        <span class="qrcode-label">微信扫码访问</span>
+    <div class="footer-qr">
+        <div class="qr-text">扫码查询其他产品追溯信息</div>
+        <div class="qr-container">
+            <div class="qr-code">
+                <i class="fas fa-qrcode"></i>
+            </div>
+        </div>
     </div>
-
+    
     <script>
+        // 简单的动画效果
         document.addEventListener('DOMContentLoaded', function() {
-            // 获取当前URL并处理微信兼容性
-            let currentUrl = window.location.href;
+            const timelineItems = document.querySelectorAll('.timeline-item');
             
-            // 1. 处理本地文件协议问题
-            if(currentUrl.startsWith('file://')) {
-                document.getElementById('localWarning').style.display = 'block';
-                
-                // 提供替代方案（使用ngrok示例）
-                currentUrl = "https://example.com"; // 替换为您的公网URL
-                
-                // 或者提示用户
-                alert("微信无法打开本地文件，请使用公网可访问的URL");
-            }
+            timelineItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateY(0)';
+                }, 300 * index);
+            });
             
-            // 2. 确保使用HTTPS（微信强制要求）
-            if(currentUrl.startsWith('http://')) {
-                currentUrl = currentUrl.replace('http://', 'https://');
-            }
-            
-            // 3. 清理URL中的特殊字符
-            currentUrl = encodeURI(currentUrl);
-            
-            // 4. 生成二维码（提高容错率）
-            try {
-                new QRCode(document.getElementById("qrcode"), {
-                    text: currentUrl,
-                    width: 150,
-                    height: 150,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.Q // 更高的容错率
-                });
-                
-                console.log("生成的二维码URL:", currentUrl);
-                
-                // 5. 添加调试信息
-                const debugInfo = document.createElement('p');
-                debugInfo.style.fontSize = '12px';
-                debugInfo.style.color = '#666';
-                debugInfo.textContent = `URL: ${currentUrl}`;
-                document.querySelector('.qrcode-container').appendChild(debugInfo);
-                
-            } catch (error) {
-                console.error("二维码生成失败:", error);
-                document.getElementById("qrcode").innerHTML = 
-                    '<p style="color:red">二维码生成失败</p>';
-            }
+            // 初始化样式
+            timelineItems.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(20px)';
+                item.style.transition = 'opacity 0.5s, transform 0.5s';
+            });
         });
     </script>
 </body>
