@@ -18,7 +18,7 @@
             color: #333;
             line-height: 1.6;
             min-height: 100vh;
-            padding-bottom: 120px;
+            padding-bottom: 60px;
         }
         
         .container {
@@ -305,63 +305,103 @@
             font-weight: bold;
         }
         
-        .footer-qr {
+        .back-to-top {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #1a3b29;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #1a6d3b;
             color: white;
-            padding: 20px 0;
-            text-align: center;
-            z-index: 100;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.15);
-        }
-        
-        .qr-container {
-            display: inline-block;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            margin-top: 10px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-        
-        .qr-code {
-            width: 120px;
-            height: 120px;
-            background: #f0f0f0;
-            border-radius: 10px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto;
-            position: relative;
-            overflow: hidden;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 99;
+            opacity: 0;
+            transform: translateY(20px);
         }
         
-        .qr-code::before {
-            content: "";
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: 
-                linear-gradient(45deg, transparent 48%, #1a6d3b 50%, transparent 52%),
-                linear-gradient(-45deg, transparent 48%, #1a6d3b 50%, transparent 52%);
-            background-size: 20px 20px;
-            opacity: 0.5;
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
-        .qr-code i {
-            font-size: 3rem;
-            color: #1a6d3b;
-            z-index: 2;
+        .back-to-top:hover {
+            background: #2c9c5c;
+            transform: translateY(-5px);
         }
         
-        .qr-text {
-            margin-top: 10px;
+        .trace-info-summary {
+            background: #1a6d3b;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 8px 20px rgba(26, 109, 59, 0.3);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-around;
+        }
+        
+        .trace-item {
+            text-align: center;
+            min-width: 150px;
+        }
+        
+        .trace-item .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .trace-item .label {
             font-size: 0.95rem;
-            color: rgba(255,255,255,0.9);
+            opacity: 0.9;
+        }
+        
+        .trace-item i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #a8e6c1;
+        }
+        
+        .certificate-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+        
+        .certificate-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .certificate-card {
+            flex: 1;
+            min-width: 300px;
+            background: #f9fbf7;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #1a6d3b;
+        }
+        
+        .certificate-title {
+            color: #1a6d3b;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         @media (max-width: 768px) {
@@ -398,6 +438,16 @@
             .timeline-date {
                 margin-left: 30px;
             }
+            
+            .back-to-top {
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .trace-info-summary {
+                flex-direction: column;
+                align-items: center;
+            }
         }
     </style>
 </head>
@@ -427,7 +477,7 @@
                             <div class="detail-value">2024年4月25日</div>
                         </div>
                         <div class="trace-code">
-                            <i class="fas fa-qrcode"></i> 追溯码：7X9A2B5C8D3E1F
+                            <i class="fas fa-fingerprint"></i> 追溯码：7X9A2B5C8D3E1F
                         </div>
                     </div>
                 </div>
@@ -443,6 +493,30 @@
     </header>
     
     <div class="container">
+        <!-- 追溯信息摘要 -->
+        <div class="trace-info-summary">
+            <div class="trace-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <span class="number">5</span>
+                <span class="label">生产环节</span>
+            </div>
+            <div class="trace-item">
+                <i class="fas fa-thermometer-half"></i>
+                <span class="number">72</span>
+                <span class="label">小时冷链运输</span>
+            </div>
+            <div class="trace-item">
+                <i class="fas fa-check-circle"></i>
+                <span class="number">32</span>
+                <span class="label">项质量检测</span>
+            </div>
+            <div class="trace-item">
+                <i class="fas fa-shield-alt"></i>
+                <span class="number">8</span>
+                <span class="label">区块链节点验证</span>
+            </div>
+        </div>
+        
         <div class="timeline-section">
             <h2 class="section-title"><i class="fas fa-list-alt"></i> 产品全流程追溯</h2>
             
@@ -531,14 +605,7 @@
                             <div class="content-label">质检结果：</div>
                             <div class="content-value">合格率98.7%，特级品率85.2%</div>
                         </div>
-                        <div class="photos">
-                            <div class="photo">
-                                <img src="https://images.unsplash.com/photo-1587049633312-d628ae50a8ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="人工采摘">
-                            </div>
-                            <div class="photo">
-                                <img src="https://images.unsplash.com/photo-1595341788871-10e5e9a3d1c2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="采摘成果">
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 
@@ -589,14 +656,7 @@
                             <div class="content-label">运输时间：</div>
                             <div class="content-value">总时长72小时，途中无异常</div>
                         </div>
-                        <div class="photos">
-                            <div class="photo">
-                                <img src="https://images.unsplash.com/photo-1603739903239-8b6e64c3b185?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="冷链运输">
-                            </div>
-                            <div class="photo">
-                                <img src="https://images.unsplash.com/photo-1560963689-b9b4d0d825d1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="温度监控">
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
                 
@@ -664,22 +724,39 @@
                 </div>
             </div>
         </div>
-    </div>
-    
-    <div class="footer-qr">
-        <div class="qr-text">扫码查询其他产品追溯信息</div>
-        <div class="qr-container">
-            <div class="qr-code">
-                <i class="fas fa-qrcode"></i>
+        
+        <!-- 认证证书部分 -->
+        <div class="certificate-section">
+            <h2 class="section-title"><i class="fas fa-certificate"></i> 产品认证信息</h2>
+            <div class="certificate-content">
+                <div class="certificate-card">
+                    <h3 class="certificate-title"><i class="fas fa-leaf"></i> 有机产品认证</h3>
+                    <p><strong>认证机构：</strong>中国质量认证中心</p>
+                    <p><strong>证书编号：</strong>ORG-CN-2024-12345</p>
+                    <p><strong>有效期：</strong>2024年1月1日 - 2026年12月31日</p>
+                </div>
+                <div class="certificate-card">
+                    <h3 class="certificate-title"><i class="fas fa-globe-asia"></i> 地理标志保护</h3>
+                    <p><strong>产品名称：</strong>青神羊肚菌</p>
+                    <p><strong>批准文号：</strong>GI-2023-SC-028</p>
+                    <p><strong>保护范围：</strong>四川省眉山市青神县全境</p>
+                </div>
             </div>
         </div>
+        
+        <!-- 产品推荐部分已移除 -->
+    </div>
+    
+    <div class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
     </div>
     
     <script>
-        // 简单的动画效果
         document.addEventListener('DOMContentLoaded', function() {
             const timelineItems = document.querySelectorAll('.timeline-item');
+            const backToTop = document.querySelector('.back-to-top');
             
+            // 初始化时间线动画
             timelineItems.forEach((item, index) => {
                 setTimeout(() => {
                     item.style.opacity = '1';
@@ -692,6 +769,26 @@
                 item.style.opacity = '0';
                 item.style.transform = 'translateY(20px)';
                 item.style.transition = 'opacity 0.5s, transform 0.5s';
+            });
+            
+            // 滚动事件监听
+            window.addEventListener('scroll', function() {
+                // 显示/隐藏返回顶部按钮
+                const scrollPosition = window.scrollY;
+                
+                if (scrollPosition > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+            
+            // 返回顶部功能
+            backToTop.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             });
         });
     </script>
